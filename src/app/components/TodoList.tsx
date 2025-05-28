@@ -1,9 +1,9 @@
 'use client';
 
-import { trpc } from '@/utils/trpc';
-import {useState} from "react";
+import { useState } from "react";
+import { trpc } from "@/utils/trpc";
 
-function Home() {
+export function TodoList() {
     const [newTask, setNewTask] = useState('');
     const utils = trpc.useUtils();
     const { data: tasks = [] } = trpc.getTasks.useQuery();
@@ -39,5 +39,3 @@ function Home() {
         </div>
     );
 }
-
-export default trpc.withTRPC(Home);
