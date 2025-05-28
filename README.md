@@ -14,6 +14,12 @@ run local dev serve
 npm run dev
 ```
 
+For test
+
+```bash
+npm run test
+```
+
 ## Run in docker
 
 ```bash

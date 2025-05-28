@@ -35,7 +35,7 @@ describe('taskRouter', () => {
     });
 
     describe('getTasks', () => {
-        it('should return tasks', async () => {
+        it('should return list of tasks', async () => {
             (Task.find as jest.Mock).mockResolvedValue([mockTask]);
             const result = await taskRouter.createCaller({}).getTasks();
             expect(result).toEqual([mockTask]);
@@ -49,9 +49,7 @@ describe('taskRouter', () => {
             const mockSave = jest.fn().mockResolvedValue(true);
             const savedTask = { ...input, completed: false, save: mockSave };
 
-            // Mock Task constructor to return the savedTask object
             (Task as unknown as jest.Mock).mockImplementation(() => savedTask);
-
             const result = await taskRouter.createCaller({}).addTask(input);
 
             expect(result).toEqual(savedTask);
