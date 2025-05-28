@@ -27,6 +27,10 @@ function TodoList() {
         },
     });
 
+    const toggle = trpc.toggleTask.useMutation({
+        onSuccess: () => utils.getTasks.invalidate(),
+    });
+
     const updateTask = trpc.updateTask.useMutation({
         onSuccess: () => {
             setEditTask(null);
@@ -39,7 +43,7 @@ function TodoList() {
 
 
     const deleteTask = trpc.deleteTask.useMutation({
-        onSuccess: () => {},
+        onSuccess: () => utils.getTasks.invalidate(),
     });
 
     const handleSave = () => {
@@ -52,10 +56,6 @@ function TodoList() {
         }
     };
 
-    const handleDelete = (id: string) => {
-        deleteTask.mutate({ id });
-    }
-
     return (
         <div className="min-h-screen flex items-center justify-center bg-purple-100">
             <div className="bg-white rounded-lg shadow-md w-96">
@@ -65,9 +65,8 @@ function TodoList() {
                         <Task
                             key={task._id}
                             task={task}
-                            handleDelete={() => {
-                                handleDelete(task._id);
-                            }}
+                            onDelete={() => deleteTask.mutate({ id: task._id })}
+                            onToggle={() => toggle.mutate({ id: task._id })}
                             onEdit={() => {
                                 setEditTask({ id: task._id, title: task.title, description: task.description });
                                 setNewTitle(task.title);

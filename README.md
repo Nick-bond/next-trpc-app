@@ -1,4 +1,5 @@
 # To Do List App
+![demo.png](public/demo.png)
 
 ## Getting Started
 

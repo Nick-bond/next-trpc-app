@@ -1,7 +1,7 @@
-import { z } from 'zod';
-import { initTRPC } from '@trpc/server';
-import { connectDB } from '../db';
-import { Task } from '../db/models';
+import {z} from 'zod';
+import {initTRPC} from '@trpc/server';
+import {connectDB} from '../db';
+import {Task} from '../db/models';
 
 const t = initTRPC.create();
 
@@ -16,13 +16,16 @@ export const taskRouter = t.router({
             title: z.string(),
             description: z.string().optional(),
         }))
-        .mutation(async ({ input }) => {
+        .mutation(async ({input}) => {
             await connectDB();
             const task = new Task({
                 title: input.title,
                 description: input.description || '',
                 completed: false,
             });
+            if (!task) {
+                throw new Error('Task not found');
+            }
             await task.save();
             return task;
         }),
@@ -33,24 +36,40 @@ export const taskRouter = t.router({
             title: z.string(),
             description: z.string().optional(),
         }))
-        .mutation(async ({ input }) => {
+        .mutation(async ({input}) => {
             await connectDB();
             const task = await Task.findByIdAndUpdate(
                 input.id,
-                { title: input.title, description: input.description || '' },
-                { new: true }
+                {title: input.title, description: input.description || ''},
+                {new: true}
             );
-            if (!task) throw new Error('Task not found');
+            if (!task) {
+                throw new Error('Task not found');
+            }
+            return task;
+        }),
+    toggleTask: t.procedure
+        .input(z.object({id: z.string()}))
+        .mutation(async ({input}) => {
+            await connectDB();
+            const task = await Task.findById(input.id);
+            if (!task) {
+                throw new Error('Task not found');
+            }
+            task.completed = !task.completed;
+            await task.save();
             return task;
         }),
 
     deleteTask: t.procedure
-        .input(z.object({ id: z.string() }))
-        .mutation(async ({ input }) => {
+        .input(z.object({id: z.string()}))
+        .mutation(async ({input}) => {
             await connectDB();
             const task = await Task.findByIdAndDelete(input.id);
-            if (!task) throw new Error('Task not found');
-            return { success: true };
+            if (!task) {
+                throw new Error('Task not found');
+            }
+            return {success: true};
         }),
 });
 
