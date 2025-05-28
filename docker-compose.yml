@@ -15,9 +15,7 @@ services:
       MONGODB_URI: mongodb://mongo:27017/todo-app
     depends_on:
       - mongo
-    volumes:
-      - .:/app
-      - /app/node_modules
+
 
 volumes:
   mongo-data:
