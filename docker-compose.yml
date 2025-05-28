@@ -1,19 +1,23 @@
 version: '3.8'
 services:
+  mongo:
+    image: mongo
+    ports:
+      - 27017:27017
+    volumes:
+      - mongo-data:/data/db
+
   app:
     build: .
     ports:
-      - '3000:3000'
-    env_file:
-      - .env.example
+      - 3000:3000
+    environment:
+      MONGODB_URI: mongodb://mongo:27017/todo-app
     depends_on:
       - mongo
-
-  mongo:
-    image: mongo:6.0
-    restart: always
     volumes:
-      - mongo-data:/data/db
+      - .:/app
+      - /app/node_modules
 
 volumes:
   mongo-data:
