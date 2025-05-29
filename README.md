@@ -3,6 +3,11 @@
 
 ## 🛠️ Getting Started
 
+```bash
+node v 23.11.0
+npm v 10.9.2
+```
+
 ### 1. Clone & Setup Environment
 
 ```bash
