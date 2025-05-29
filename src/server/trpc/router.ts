@@ -3,7 +3,6 @@ import {initTRPC} from '@trpc/server';
 import {connectDB} from '../db';
 import {Task} from '../db/models';
 import { sendEmail } from '../email/emailService';
-import {throws} from "node:assert";
 
 const t = initTRPC.create();
 
