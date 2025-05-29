@@ -2,6 +2,7 @@ import {z} from 'zod';
 import {initTRPC} from '@trpc/server';
 import {connectDB} from '../db';
 import {Task} from '../db/models';
+import { sendEmail } from '../email/emailService';
 
 const t = initTRPC.create();
 
@@ -58,6 +59,14 @@ export const taskRouter = t.router({
             }
             task.completed = !task.completed;
             await task.save();
+
+            const allTasks = await Task.find();
+            const allCompleted = allTasks.every(task => task.completed);
+
+            if (allCompleted) {
+                sendEmail().catch(console.log);
+            }
+
             return task;
         }),
 
