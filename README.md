@@ -13,7 +13,7 @@ npm v 10.9.2
 ```bash
 git clone git@github.com:Nick-bond/next-trpc-app.git
 cd next-trpc-app
-cp .env-sample .env
+cp .env.example .env
 ```
 
 NOTE you have to configure next variables to be able receive emails

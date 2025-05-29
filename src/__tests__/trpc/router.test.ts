@@ -9,7 +9,7 @@ jest.mock('@/server/db/models', () => {
     return {
         ...actual,
         Task: Object.assign(
-            jest.fn(), // makes Task constructible
+            jest.fn(),
             {
                 find: jest.fn(),
                 findById: jest.fn(),
